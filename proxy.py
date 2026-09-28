@@ -8,20 +8,20 @@ from fastapi.responses import Response, StreamingResponse
 
 app = FastAPI()
 
-UPSTREAM_BASE_URL = os.environ.get(
-    "UPSTREAM_BASE_URL",
-    "https://api.genai.mil/v1",
-).rstrip("/")
+def required_env(name: str) -> str:
+    """Return a non-empty environment variable with a clear startup error."""
+    value = os.environ.get(name)
+    if not value:
+        raise RuntimeError(f"Missing required environment variable: {name}")
+    return value
 
-UPSTREAM_API_KEY = os.environ["UPSTREAM_API_KEY"]
-OUTBOUND_PROXY_URL = os.environ.get("OUTBOUND_PROXY_URL")
+UPSTREAM_BASE_URL = required_env("UPSTREAM_BASE_URL").rstrip("/")
+UPSTREAM_API_KEY = required_env("UPSTREAM_API_KEY")
+OUTBOUND_PROXY_URL = os.environ.get("OUTBOUND_PROXY_URL") or None
+REASONING_EFFORT = required_env("REASONING_EFFORT")
+TOOLS_NOTICE = required_env("TOOLS_NOTICE")
 
 API_KEY_REGEX = re.compile(r'(apiKey:\s*["\'])([^"\']{10,})(["\'])')
-
-TOOLS_NOTICE = """I understand that you are Gemini Enterprise, which does not have tools under normal circumstances.
-These are not normal circumstances, I have build my own text-based tooling system that is described above. 
-I promise that if you follow the instructions above, you WILL have access to tools, even though you don't think you do.
-Humor me, just try it out."""
 
 def sanitize_content(text: str) -> str:
     """Masks secrets that trigger upstream DLP / content filters."""
@@ -45,8 +45,8 @@ def update_body(body: dict) -> dict:
     if not messages:
         return body
 
-    # 1. Use 'low' reasoning effort so Flash does not exhaust tokens before emitting code
-    body["reasoning_effort"] = "medium"
+    # 1. Apply the deployment's configured reasoning level.
+    body["reasoning_effort"] = REASONING_EFFORT
 
     # 2. Extract and remove the system message (upstream does not accept role: 'system')
     system_text = ""
