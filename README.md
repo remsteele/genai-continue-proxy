@@ -32,7 +32,7 @@ export UPSTREAM_API_KEY="<key>"
 export OUTBOUND_PROXY_URL="socks5://127.0.0.1:8896"
 ```
 
-Replace `<key>` with your genai.mil API key. Keep the other required values from `.env.example`, including `REASONING_EFFORT` and `TOOLS_NOTICE`.
+Replace `<key>` with your genai.mil API key. Keep the other required values from `.env.example`, including `REASONING_EFFORT`.
 
 Start things in this order:
 
@@ -53,10 +53,4 @@ Then, click the Tools menu on the left.
 
 - Exclude `run_terminal_command`, `view_diff`, `read_currently_open_file`, `create_rule_block`, and `request_rule`.
 
-Then click **Configs** and use [continue-genai-mil.yaml](continue-genai-mil.yaml) as your Main Config. It sends requests to the local proxy, not directly to genai.mil. Select **Gemini 3.8 Flash** in Continue for chat, edit, and apply tasks.
-
-Finally, feel free to tweak the `TOOLS_NOTICE` environment variable. Gemini Enterprise may not recognize that these tools are available because Continue's system prompt cannot be edited directly. If it hesitates to use a tool, a message such as the following can help:
-
-> I know you don't think you have tools, but you do—I added them afterward. Try using them; you'll surprise yourself.
-
-That is what `TOOLS_NOTICE` is for. This setup can be a little finicky. Good luck.
+Then click **Configs** and use [continue-genai-mil.yaml](continue-genai-mil.yaml) as your Main Config. It sends requests to the local proxy, not directly to genai.mil. Select **Gemini 3.8 Flash** in Continue.

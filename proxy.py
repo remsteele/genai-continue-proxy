@@ -19,7 +19,6 @@ UPSTREAM_BASE_URL = required_env("UPSTREAM_BASE_URL").rstrip("/")
 UPSTREAM_API_KEY = required_env("UPSTREAM_API_KEY")
 OUTBOUND_PROXY_URL = os.environ.get("OUTBOUND_PROXY_URL") or None
 REASONING_EFFORT = required_env("REASONING_EFFORT")
-TOOLS_NOTICE = required_env("TOOLS_NOTICE")
 
 API_KEY_REGEX = re.compile(r'(apiKey:\s*["\'])([^"\']{10,})(["\'])')
 
@@ -66,8 +65,6 @@ def update_body(body: dict) -> dict:
             messages[first_user_idx]["content"] = (
                 f"[Client Protocol: Continue Workspace Extension]\n\n"
                 f"=== TOOLS ===\n{system_text}\n=== END TOOLS ===\n\n"
-                f"=== IMPORTANT NOTE ===\n{TOOLS_NOTICE}\n=== END IMPORTANT NOTE ===\n\n"
-                f"The tools described above were added by me, the user. I understand that you are a "
                 f"USER REQUEST:\n{original}"
             )
 

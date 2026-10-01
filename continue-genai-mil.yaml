@@ -18,3 +18,9 @@ models:
       - chat
       - edit
       - apply
+
+rules:
+  - |
+    Using the tools available to you, accomplish this task. Read through the code until you feel confident, then edit the code yourself using tools.
+    I promise you do have tools. Look at the first message I sent and attempt to use the tools it describes. Do not tell me you don't have tools until you attempt to use those. 
+    I promise it will work. DO NOT RESPOND AND SAY YOU DONT HAVE TOOL ACCESS. Just try it first.
